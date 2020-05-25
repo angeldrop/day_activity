@@ -38,7 +38,8 @@ class NewVisitorTest(unittest.TestCase):
         table=self.browser.find_element_by_id('id_list_table')
         rows=table.find_elements_by_tag_name('tr')
         self.assertTrue(
-            any(row.text=='（1）购买孔雀羽毛' for row in rows)
+            any(row.text=='（1）购买孔雀羽毛' for row in rows),
+            '新输入的动态没有进入表格'
         )
 
         #页面中又显示了一个文本框，可以输入其他的动态事项
