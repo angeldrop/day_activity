@@ -37,19 +37,25 @@ class NewVisitorTest(unittest.TestCase):
         
         table=self.browser.find_element_by_id('id_list_table')
         rows=table.find_elements_by_tag_name('tr')
-        self.assertTrue(
-            any(row.text=='（1）购买孔雀羽毛' for row in rows),
-            '新输入的动态没有进入表格'
-        )
+        self.assertIn('（1）去锦界拉业务；',[row.text for row in rows])
 
         #页面中又显示了一个文本框，可以输入其他的动态事项
         #她输入了“去天宫和玉帝拉业务”
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('去天宫和玉帝拉业务')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
         #页面再次更新，她的清单中显示了这两个动态事项
-        self.fail('结束测试')
+        table=self.browser.find_element_by_id('id_list_table')
+        rows=table.find_elements_by_tag_name('tr')
+        self.assertIn('（1）去锦界拉业务；',[row.text for row in rows])
+        self.assertIn('（2）去天宫和玉帝拉业务；',[row.text for row in rows])
+        
         #张三芬想知道这个网站是否会记住她的动态事项清单
         #她看到网站为她生成了一个唯一的URL
         #而且页面中有一些文字解说这个功能
+        self.fail('结束测试')
 
         #她访问那个URL，发现她的动态事项列表还在
 
