@@ -1,0 +1,15 @@
+<html>
+<head>
+    <title>榆林分行报动态系统</title>
+</head>
+<body>
+    <h1>榆林分行报动态系统</h1>
+    <form method="POST">
+        <input id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
+        {% csrf_token %}
+    </form>
+    <table id="id_list_table">
+        <tr><td>（1）{{ new_item_text }}；</td></tr>
+    </table>
+</body>
+</html>
