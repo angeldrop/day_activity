@@ -1,9 +1,10 @@
+from django.test import LiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser=webdriver.Firefox()
 
@@ -18,7 +19,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_打开首页并可以再次回复打开(self):
         #张三芬听说有一个很酷的在线报动态应用
         #她去看了这个应用的首页
-        self.browser.get('http://localhost:8002')
+        self.browser.get(self.live_server_url)
 
         #她注意到网页的标题和头部都包含“榆林分行报动态系统”这几个字
         self.assertIn('榆林分行报动态系统' ,self.browser.title)
@@ -62,5 +63,5 @@ class NewVisitorTest(unittest.TestCase):
 
         #她很满意，去睡觉了
 
-if __name__=="__main__":
-    unittest.main()
+# if __name__=="__main__":
+    # unittest.main()
