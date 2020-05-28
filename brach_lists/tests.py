@@ -13,9 +13,29 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response,'brach_lists/home.html')
     
     def test_可以保存POST请求(self):
-         response=self.client.post('/',data={'item_text':'新的动态一条'})
-         self.assertIn('新的动态一条',response.content.decode())
-         self.assertTemplateUsed(response,'brach_lists/home.html')
+        response=self.client.post('/',data={'item_text':'新的动态一条'})
+        self.assertEqual(Item.objects.count(),1)
+        new_item=Item.objects.first()
+        self.assertEqual(new_item.text,'新的动态一条')
+
+    def test_POST之后重定向(self):
+        response=self.client.post('/',data={'item_text':'新的动态一条'})
+        self.assertEqual(response.status_code,302)
+        self.assertEqual(response['location'],'/')
+
+    def test_在必要的时候才保存item(self):
+        response=self.client.get('/')
+        self.assertEqual(Item.objects.count(),0)
+
+    def test_显示所有的动态项(self):
+        Item.objects.create(text='itemey1')
+        Item.objects.create(text='itemey2')
+        
+        response=self.client.get('/')
+        
+        self.assertIn('itemey1',response.content.decode())
+        self.assertIn('itemey2',response.content.decode())
+
 
 
 class ItemModelTest(TestCase):
