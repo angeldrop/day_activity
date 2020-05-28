@@ -1,9 +1,11 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.common.keys import Keys
 import time
 import unittest
 
+MAX_WAIT=10
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser=webdriver.Firefox()
@@ -12,11 +14,19 @@ class NewVisitorTest(LiveServerTestCase):
         self.browser.quit()
 
     def fun_检查表格中的行内容(self,row_text):
-        table=self.browser.find_element_by_id('id_list_table')
-        rows=table.find_elements_by_tag_name('tr')
-        self.assertIn(row_text,[row.text for row in rows])
+        start_time=time.time()
+        while True:
+            try:
+                table=self.browser.find_element_by_id('id_list_table')
+                rows=table.find_elements_by_tag_name('tr')
+                self.assertIn(row_text,[row.text for row in rows])
+                return
+            except (AssertionError,WebDriverException) as e:
+                if time.time()-start_time>MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
 
-    def test_打开首页并可以再次回复打开(self):
+    def test_开始一个分支机构用户的动态清单(self):
         #张三芬听说有一个很酷的在线报动态应用
         #她去看了这个应用的首页
         self.browser.get(self.live_server_url)
@@ -39,7 +49,6 @@ class NewVisitorTest(LiveServerTestCase):
         #她按回车键后，页面更新了
         #待办事项表格中显示了“（1）去锦界拉业务”
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
         self.fun_检查表格中的行内容('（1）去锦界拉业务；')
 
         #页面中又显示了一个文本框，可以输入其他的动态事项
@@ -47,7 +56,6 @@ class NewVisitorTest(LiveServerTestCase):
         inputbox=self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('去天宫和玉帝拉业务')
         inputbox.send_keys(Keys.ENTER)
-        time.sleep(1)
 
         #页面再次更新，她的清单中显示了这两个动态事项
         self.fun_检查表格中的行内容('（1）去锦界拉业务；')
@@ -57,11 +65,56 @@ class NewVisitorTest(LiveServerTestCase):
         #张三芬想知道这个网站是否会记住她的动态事项清单
         #她看到网站为她生成了一个唯一的URL
         #而且页面中有一些文字解说这个功能
-        self.fail('结束测试')
+        
 
         #她访问那个URL，发现她的动态事项列表还在
 
         #她很满意，去睡觉了
-
+        
+    def test_新用户可以通过不同的url开始一个动态清单(self):
+        #张三芬新建一个动态清单
+        self.browser.get(self.live_server_url)
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('去天堂拉业务')
+        inputbox.send_keys(Keys.ENTER)
+        self.fun_检查表格中的行内容('（1）去天堂拉业务；')
+        
+        #她注意到清单有个唯一的url
+        zsf_brach_lists_url=self.browser.current_url
+        self.assertRegex(zsf_brach_lists_url,'/brach_lists/.+')
+        
+        #现在另外一个王麻子访问了网站
+        
+        ##我们使用一个新浏览器会话
+        ##确保张三芬的信息不会从cookie中泄露出去
+        self.browser.quit()
+        self.browser=webdriver.Firefox()
+        
+        #王麻子访问首页
+        #页面中看不到张三芬的清单
+        self.browser.get(self.live_server_url)
+        page_text=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('去天堂拉业务',page_text)
+        self.assertNotIn('去天宫和玉帝拉业务',page_text)
+        
+        #王麻子输入一个新动态，新建一个清单
+        #他不想张三芬那么兴致勃勃
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('去地狱拉业务')
+        inputbox.send_keys(Keys.ENTER)
+        self.fun_检查表格中的行内容('（1）去地狱拉业务；')
+        
+        #王麻子或得了他惟一的URL
+        wmz_brach_lists_url=self.browser.current_url
+        self.assertRegex(wmz_brach_lists_url,'/brach_lists/.+')
+        self.assertNotEqual(wmz_brach_lists_url,zsf_brach_lists_url)
+        
+        #这个页面还是没有张三芬的清单
+        page_text=self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('去天堂拉业务',page_text)
+        self.assertIn('去地狱拉业务',page_text)
+        
+        #两人都很满意，去睡觉了。
+        self.fail('结束测试')
 # if __name__=="__main__":
     # unittest.main()
