@@ -21,21 +21,11 @@ class HomePageTest(TestCase):
     def test_POST之后重定向(self):
         response=self.client.post('/',data={'item_text':'新的动态一条'})
         self.assertEqual(response.status_code,302)
-        self.assertEqual(response['location'],'/')
+        self.assertEqual(response['location'],'/brach_lists/the-only-list-in-the-world/')
 
     def test_在必要的时候才保存item(self):
         response=self.client.get('/')
         self.assertEqual(Item.objects.count(),0)
-
-    def test_显示所有的动态项(self):
-        Item.objects.create(text='itemey1')
-        Item.objects.create(text='itemey2')
-        
-        response=self.client.get('/')
-        
-        self.assertIn('itemey1',response.content.decode())
-        self.assertIn('itemey2',response.content.decode())
-
 
 
 class ItemModelTest(TestCase):
@@ -54,4 +44,19 @@ class ItemModelTest(TestCase):
         second_saved_item=saved_items[1]
         self.assertEqual(first_saved_item.text,'The first (ever) list item')
         self.assertEqual(second_saved_item.text,'Item the second')
+
+
+class ListViewTest(TestCase):
+    def test_打开q清单页并返回正确的template(self):
+        response=self.client.get('/brach_lists/the-only-list-in-the-world/')
+        self.assertTemplateUsed(response,'brach_lists/list.html')
+    
+    
+    def test_显示所有的动态项(self):
+        Item.objects.create(text='itemey1')
+        Item.objects.create(text='itemey2')
         
+        response=self.client.get('/brach_lists/the-only-list-in-the-world/')
+        
+        self.assertContains(response,'itemey1')
+        self.assertContains(response,'itemey2')
