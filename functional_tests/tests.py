@@ -142,4 +142,4 @@ class NewVisitorTest(LiveServerTestCase):
         #两人都很满意，去睡觉了。
         self.fail('结束测试')
 # if __name__=="__main__":
-    # unittest.main()
+    # unittest.main()    测试ssh
