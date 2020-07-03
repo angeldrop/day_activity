@@ -11,4 +11,6 @@ class DayActivityUserList(models.Model):
 
 class Item(models.Model):
     text=models.TextField(default='')
+    record_date_time=models.DateTimeField(auto_now=True)
+    activity_date=models.DateField(auto_now=True)
     list=models.ForeignKey(DayActivityUserList,default=None,on_delete=models.CASCADE)

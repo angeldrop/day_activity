@@ -3,15 +3,16 @@
     <title>榆林分行报动态系统</title>
 </head>
 <body>
-    <h1>榆林分行报动态系统</h1>
+    <h1>欢迎使用榆林分行报动态系统</h1>
     <form method="POST" action="/">
-        <input id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
-        {% csrf_token %}
-    </form>
-    <table id="id_list_table">
-        {% for item in items %}
-            <tr><td>（{{forloop.counter}}）{{ item.text }}；</td></tr>
+        <select name="brach_id" id="select_box">
+        {% for list in brach_lists %}
+            <option value="{{list.id}}">{{list.full_name}}</option>
         {% endfor %}
-    </table>
+        </select>
+        <input type="submit" value="登录" id="submit">
+        {% csrf_token %}
+        
+    </form>
 </body>
 </html>
