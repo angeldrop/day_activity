@@ -14,14 +14,6 @@ def home_page(request):
 
 
 def view_list(request,brach_id):
-    if request.method=="POST":
-        list_=DayActivityUserList.objects.get(id=brach_id)
-        text_temp=request.POST['item_text']
-        if text_temp[-1] in ['；','。','！',',','.']:
-            text_temp=text_temp[:-1]
-        Item.objects.create(text=text_temp,list=list_)
-        return redirect(f'/brach_lists/{brach_id}/')
-
     list_=DayActivityUserList.objects.get(id=brach_id)
     items=Item.objects.filter(list=list_)
     days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
@@ -37,7 +29,7 @@ def view_list(request,brach_id):
 def add_item(request,brach_id):
     list_=DayActivityUserList.objects.get(id=brach_id)
     text_temp=request.POST['item_text']
-        if text_temp[-1] in ['；','。','！',',','.']:
-            text_temp=text_temp[:-1]
-        Item.objects.create(text=text_temp,list=list_)
+    if text_temp[-1] in ['；','。','！',',','.']:
+        text_temp=text_temp[:-1]
+    Item.objects.create(text=text_temp,list=list_)
     return redirect(f'/brach_lists/{brach_id}/')

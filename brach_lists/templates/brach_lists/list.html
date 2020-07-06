@@ -4,7 +4,7 @@
 </head>
 <body>
     <h1>榆林分行报动态系统</h1>
-    <form method="POST" action="/brach_lists/{{list.id}}/">
+    <form method="POST" action="/brach_lists/{{list.id}}/add_item">
         <input id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
         {% csrf_token %}
     </form>
