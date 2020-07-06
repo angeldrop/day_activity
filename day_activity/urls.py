@@ -20,6 +20,7 @@ from brach_lists import views
 urlpatterns = [
     # path('admin/', admin.site.urls),
     path('', views.home_page, name='home'),
-    re_path(r'^brach_lists/(.+)/$', views.view_list, name='view_list'),
+    re_path(r'^brach_lists/([a-z,A-Z,0-9]+)?/$', views.view_list, name='view_list'),
+    re_path(r'^brach_lists/([a-z,A-Z,0-9]+)?/add_item$', views.add_item, name='add_item'),
     
 ]

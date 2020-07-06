@@ -52,13 +52,6 @@ class ListViewTest(TestCase):
         response=self.client.get('/brach_lists/ylxxkj/')
         self.assertTemplateUsed(response,'brach_lists/list.html')
     
-    def test_可以保存POST请求(self):
-        DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
-            brach_type='部门',full_name='信息科技部')
-        response=self.client.post('/brach_lists/ylxxkj/',data={'item_text':'新的动态一条'})
-        self.assertEqual(Item.objects.count(),1)
-        new_item=Item.objects.first()
-        self.assertEqual(new_item.text,'新的动态一条')
     
     def test_显示所有的动态项(self):
         list_=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
@@ -78,3 +71,28 @@ class ListViewTest(TestCase):
         self.assertEqual(Item.objects.first().text,'新的动态，一条')
         response=self.client.post('/brach_lists/ylxxkj/',data={'item_text':'新的第二条；动态一条。'})
         self.assertEqual(Item.objects.last().text,'新的第二条；动态一条')
+
+
+class NewItemTest(TestCase):
+    def test_可以保存POST请求(self):
+        other_branch=DayActivityUserList.objects.create(id='806050701',order_number=15,
+            brach_type='管理型支行',full_name='府谷县支行')
+        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        self.client.post(f'/brach_lists/{correct_branch.id}/add_item',
+            data={'item_text':'新的动态一条'}
+            )
+        self.assertEqual(Item.objects.count(),1)
+        new_item=Item.objects.first()
+        self.assertEqual(new_item.text,'新的动态一条')
+        self.assertEqual(new_item.list,correct_branch)
+        
+    def test_重新定位到list_view(self):
+        other_branch=DayActivityUserList.objects.create(id='806050701',order_number=15,
+            brach_type='管理型支行',full_name='府谷县支行')
+        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        response=self.client.post(f'/brach_lists/{correct_branch.id}/add_item',
+            data={'item_text':'新的动态一条'}
+            )
+        self.assertRedirects(response,f'/brach_lists/{correct_branch.id}/')
