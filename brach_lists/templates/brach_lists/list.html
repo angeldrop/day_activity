@@ -5,10 +5,8 @@
 <body>
     <h1>榆林分行报动态系统</h1>
     <form method="POST" action="/brach_lists/{{list.id}}/add_item">
-        <p style="text-align:center;">
         <input id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
         {% csrf_token %}
-        </p>
     </form>
     <h2>{{list.full_name}}：</h2>
     <table id="id_list_table">
