@@ -25,9 +25,10 @@
                 </div>
             </div>
         </div>
-        <h2>{% block brach_name %}{% endblock %}</h2>
+        
         <div class="row">
-            <div class="col-md-10 offset-md-1">
+            {% block brach_name %}{% endblock %}
+            <div class="col-md-10 offset-md-1  text-left">
                     {% block table %}
                     {% endblock %}
             </div>

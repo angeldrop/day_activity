@@ -5,10 +5,14 @@
 {% block form_action %}/{% endblock %}
 
 {% block form_body %}
-    <select name="brach_id" id="select_box">
-    {% for list in brach_lists %}
-        <option value="{{list.id}}">{{list.full_name}}</option>
-    {% endfor %}
-    </select>
-    <input type="submit" value="登录" id="submit">
+    <div class="form-group col-6 mx-auto">
+        <!-- <label for="select_box">部门、机构：</label> -->
+        <select name="brach_id" id="select_box" class="form-control form-control-lg">
+        {% for list in brach_lists %}
+            <option value="{{list.id}}">{{list.full_name}}</option>
+        {% endfor %}
+        </select>
+        <small id="select_box_help" class="form-text text-info text-info mb-3">请在下拉列表中选择您的机构，然后点击登录。</small>
+        <input type="submit" value="登录" id="submit" class="btn btn-primary">
+    </div>
 {% endblock %}

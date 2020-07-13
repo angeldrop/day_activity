@@ -1,4 +1,4 @@
-from django.test import LiveServerTestCase
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.common.exceptions import WebDriverException
@@ -11,7 +11,7 @@ import time,datetime
 import unittest
 
 MAX_WAIT=10
-class NewVisitorTest(LiveServerTestCase):
+class NewVisitorTest(StaticLiveServerTestCase):
     def setUp(self):
         ##提前今天的数据，备以后显示使用
         self.today=datetime.datetime.today().date()
