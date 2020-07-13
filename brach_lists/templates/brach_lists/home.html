@@ -1,18 +1,14 @@
-<html>
-<head>
-    <title>榆林分行报动态系统</title>
-</head>
-<body>
-    <h1>欢迎使用榆林分行报动态系统</h1>
-    <form method="POST" action="/">
-        <select name="brach_id" id="select_box">
-        {% for list in brach_lists %}
-            <option value="{{list.id}}">{{list.full_name}}</option>
-        {% endfor %}
-        </select>
-        <input type="submit" value="登录" id="submit">
-        {% csrf_token %}
-        
-    </form>
-</body>
-</html>
+{% extends 'brach_lists/base.html' %}
+
+{% block header_text %}欢迎使用榆林分行报动态系统{% endblock %}
+
+{% block form_action %}/{% endblock %}
+
+{% block form_body %}
+    <select name="brach_id" id="select_box">
+    {% for list in brach_lists %}
+        <option value="{{list.id}}">{{list.full_name}}</option>
+    {% endfor %}
+    </select>
+    <input type="submit" value="登录" id="submit">
+{% endblock %}
