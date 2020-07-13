@@ -12,7 +12,7 @@
 
 {% block brach_name %}
     <div class="col-md-10 mx-auto  px-3 py-5 text-center jumbotron  bg-info text-light">
-        <h2 id="brach_top">{{list.full_name}}每日动态：</h2>
+        <h2 id="brach_top"><b>{{list.full_name}}每日动态：</b></h2>
     </div>
 {% endblock %}
 
@@ -23,7 +23,7 @@
         {% if thing.0 == today %}
             <table class="table">
                 <thead  class="thead-dark">
-                    <th class="thead-dark"><h3>今日动态</br>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日：</h3></th>
+                    <th class="thead-dark"><h3><b>今日动态</br>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日：</b></h3></th>
                 </thead>
                 {% if thing.1|length_is:"1" %}
                     <tr><td class="h5">{{ thing.1.0 }}。</td></tr>
@@ -40,7 +40,7 @@
         {% else %}
             <table class="table">
                 <thead  class="thead-light">
-                    <th><h4>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日动态：</h4></th>
+                    <th><h4><b>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日动态：</b></h4></th>
                 </thead>
                 {% if thing.1|length_is:"1" %}
                     <tr><td class="h5">{{ thing.1.0 }}。</td></tr>
