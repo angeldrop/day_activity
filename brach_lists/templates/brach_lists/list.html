@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block table %}
-<table id="id_list_table">
+<div id="id_list_table">
 
     {% for thing in things %}
         {% if thing.0 == today %}
@@ -58,5 +58,5 @@
         
     {% endfor %}
 
-</table>
+</div>
 {% endblock %}

@@ -29,8 +29,22 @@ class NewVisitorTest(StaticLiveServerTestCase):
         start_time=time.time()
         while True:
             try:
-                table=self.browser.find_element_by_id('id_list_table')
-                rows=table.find_elements_by_tag_name('tr')
+                tables=self.browser.find_element_by_id('id_list_table')
+                rows=tables.find_elements_by_tag_name('tr')
+                self.assertIn(row_text,[row.text for row in rows])
+                return
+            except (AssertionError,WebDriverException) as e:
+                if time.time()-start_time>MAX_WAIT:
+                    raise e
+                time.sleep(0.5)
+    
+    
+    def fun_检查表格中的标题行内容(self,row_text):
+        start_time=time.time()
+        while True:
+            try:
+                tables=self.browser.find_element_by_id('id_list_table')
+                rows=tables.find_elements_by_tag_name('th')
                 self.assertIn(row_text,[row.text for row in rows])
                 return
             except (AssertionError,WebDriverException) as e:
@@ -85,7 +99,7 @@ class NewVisitorTest(StaticLiveServerTestCase):
         #待办事项表格中显示了“今日动态（日期）：”和“去锦界拉业务。”
         inputbox.send_keys(Keys.ENTER)
         today_chinese=f'{self.today.year}年{self.today.month}月{self.today.day}日'
-        self.fun_检查表格中的行内容(f'今日动态（{today_chinese}）：')
+        self.fun_检查表格中的标题行内容(f'今日动态\n{today_chinese}：')
         self.fun_检查表格中的行内容('去锦界拉业务。')
 
         #页面中又显示了一个文本框，可以输入其他的动态事项
