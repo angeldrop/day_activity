@@ -42,11 +42,20 @@ class NewVisitorTest(LiveServerTestCase):
         #信息科技部听说有一个很酷的在线报动态应用
         #她去看了这个应用的首页
         self.browser.get(self.live_server_url)
+        self.browser.set_window_size(1024,768)
 
         #她注意到网页的标题和头部都包含“榆林分行报动态系统”这几个字
         self.assertIn('榆林分行报动态系统' ,self.browser.title)
         head_text=self.browser.find_element_by_tag_name('h1').text
         self.assertIn('榆林分行报动态系统' ,head_text)        
+
+        #她看到选择框完美地居中显示
+        select_box=self.browser.find_element_by_id('select_box')
+        self.assertAlmostEqual(
+            select_box.location['x']+select_box.size['width']/2,
+            512,
+            delta=10
+        )
 
         #她选择信息科技部并登录
         select_box=self.browser.find_element_by_id('select_box')
@@ -59,6 +68,15 @@ class NewVisitorTest(LiveServerTestCase):
             inputbox.get_attribute('placeholder'),
             '请输入动态事项'
         )
+        
+        #她看到输入框完美地居中显示
+        inputbox=self.browser.find_element_by_id('id_new_item')
+        self.assertAlmostEqual(
+            inputbox.location['x']+inputbox.size['width']/2,
+            512,
+            delta=10
+        )
+        
 
         #她在一个文本框中输入了“去锦界拉业务”（拉信贷业务）
         inputbox.send_keys('去锦界拉业务')

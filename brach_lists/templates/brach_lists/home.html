@@ -5,11 +5,13 @@
 <body>
     <h1>欢迎使用榆林分行报动态系统</h1>
     <form method="POST" action="/">
+        <p style="text-align:center;">
         <select name="brach_id" id="select_box">
         {% for list in brach_lists %}
             <option value="{{list.id}}">{{list.full_name}}</option>
         {% endfor %}
         </select>
+        </p>
         <input type="submit" value="登录" id="submit">
         {% csrf_token %}
         
