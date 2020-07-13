@@ -11,8 +11,8 @@
 {% endblock %}
 
 {% block brach_name %}
-    <div class="col-md-10 mx-auto mb-5">
-        <h2>{{list.full_name}}：</h2>
+    <div class="col-md-10 mx-auto  px-3 py-5 text-center jumbotron  bg-info text-light">
+        <h2 id="brach_top">{{list.full_name}}每日动态：</h2>
     </div>
 {% endblock %}
 
@@ -22,30 +22,34 @@
     {% for thing in things %}
         {% if thing.0 == today %}
             <table class="table">
-                <th><td><h3>今日动态</br>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日：</h3></td></th>
+                <thead  class="thead-dark">
+                    <th class="thead-dark"><h3>今日动态</br>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日：</h3></th>
+                </thead>
                 {% if thing.1|length_is:"1" %}
-                    <tr><td>{{ thing.1.0 }}。</td></tr>
+                    <tr><td class="h5">{{ thing.1.0 }}。</td></tr>
                 {% else %}
                     {% for i in thing.1 %}
                         {% if forloop.last %}
-                            <tr><td>{{forloop.counter}}、{{ i }}。</td></tr>
+                            <tr><td class="h5">{{forloop.counter}}、{{ i }}。</td></tr>
                         {% else %}
-                            <tr><td>{{forloop.counter}}、{{ i }}；</td></tr>
+                            <tr><td class="h5">{{forloop.counter}}、{{ i }}；</td></tr>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
             </table>
         {% else %}
             <table class="table">
-                <th><td><h4>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日动态：</h4></td></th>
+                <thead  class="thead-light">
+                    <th><h4>{{ thing.0.year }}年{{ thing.0.month }}月{{ thing.0.day }}日动态：</h4></th>
+                </thead>
                 {% if thing.1|length_is:"1" %}
-                    <tr><td>{{ thing.1.0 }}。</td></tr>
+                    <tr><td class="h5">{{ thing.1.0 }}。</td></tr>
                 {% else %}
                     {% for i in thing.1 %}
                         {% if forloop.last %}
-                            <tr><td>{{forloop.counter}}、{{ i }}。</td></tr>
+                            <tr><td class="h5">{{forloop.counter}}、{{ i }}。</td></tr>
                         {% else %}
-                            <tr><td>{{forloop.counter}}、{{ i }}；</td></tr>
+                            <tr><td class="h5">{{forloop.counter}}、{{ i }}；</td></tr>
                         {% endif %}
                     {% endfor %}
                 {% endif %}
