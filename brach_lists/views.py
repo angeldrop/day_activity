@@ -17,6 +17,14 @@ def home_page(request):
 def view_list(request,brach_id):
     list_=DayActivityUserList.objects.get(id=brach_id)
     error=None
+    items=Item.objects.filter(list=list_)
+    days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
+    today=datetime.datetime.today().date()
+    things=[]
+    for day in days:
+        things.append([day.activity_date,
+            [i.text for i in items.filter(activity_date=day.activity_date).order_by('record_date_time')]
+            ])
     if request.method=='POST':
         text_temp=request.POST['item_text']
         if not len(text_temp)==0:
@@ -26,48 +34,8 @@ def view_list(request,brach_id):
         try:
             item.full_clean()
             item.save()
+            return redirect(f'/brach_lists/{brach_id}/')
         except ValidationError:
             error="您不能输入空值！！"
-            items=Item.objects.filter(list=list_)
-            days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
-            today=datetime.datetime.today().date()
-            things=[]
-            for day in days:
-                things.append([day.activity_date,
-                    [i.text for i in items.filter(activity_date=day.activity_date).order_by('record_date_time')]
-                    ])
-            return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error})
-        return redirect(f'/brach_lists/{brach_id}/')
-    items=Item.objects.filter(list=list_)
-    days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
-    today=datetime.datetime.today().date()
-    things=[]
-    for day in days:
-        things.append([day.activity_date,
-            [i.text for i in items.filter(activity_date=day.activity_date).order_by('record_date_time')]
-            ])
     return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error})
 
-
-def add_item(request,brach_id):
-    list_=DayActivityUserList.objects.get(id=brach_id)
-    text_temp=request.POST['item_text']
-    if not len(text_temp)==0:
-        if text_temp[-1] in ['；','。','！',',','.']:
-            text_temp=text_temp[:-1]
-    item=Item(text=text_temp,list=list_)
-    try:
-        item.full_clean()
-        item.save()
-    except ValidationError:
-        error="您不能输入空值！！"
-        items=Item.objects.filter(list=list_)
-        days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
-        today=datetime.datetime.today().date()
-        things=[]
-        for day in days:
-            things.append([day.activity_date,
-                [i.text for i in items.filter(activity_date=day.activity_date).order_by('record_date_time')]
-                ])
-        return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error})
-    return redirect(f'/brach_lists/{brach_id}/')

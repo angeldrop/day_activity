@@ -21,6 +21,5 @@ from brach_lists import urls as brach_lists_urls
 
 urlpatterns = [
     re_path(r'^([a-z,A-Z,0-9]+)?/$', brach_lists_views.view_list, name='view_list'),
-    re_path(r'^([a-z,A-Z,0-9]+)?/add_item$', brach_lists_views.add_item, name='add_item'),
     
 ]
