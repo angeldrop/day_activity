@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -7,6 +8,9 @@ class DayActivityUserList(models.Model):
     order_number=models.TextField(default='')
     brach_type=models.TextField(default='')
     full_name=models.TextField(default='')
+    
+    def get_absolute_url(self):
+        return reverse('view_list',args=[self.id])
     
 
 class Item(models.Model):

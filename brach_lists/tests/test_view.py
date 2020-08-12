@@ -13,6 +13,8 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response,'brach_lists/home.html')
     
     def test_提交选择支行并登录POST之后重定向(self):
+        DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
         response=self.client.post('/',data={'brach_id':'ylxxkj'})
         self.assertEqual(response.status_code,302)
         self.assertEqual(response['location'],'/brach_lists/ylxxkj/')

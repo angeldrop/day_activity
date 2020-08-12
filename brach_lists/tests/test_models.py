@@ -38,3 +38,9 @@ class ItemModelTest(TestCase):
         with self.assertRaises(ValidationError):
             item.save()
             item.full_clean()
+    
+    
+    def test_get_absolute_url(self):
+        list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        self.assertEqual(list_.get_absolute_url(),f'/brach_lists/{list_.id}/')

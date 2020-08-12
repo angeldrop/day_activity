@@ -8,7 +8,8 @@ def home_page(request):
     brach_lists=DayActivityUserList.objects.all()
     if request.method=="POST":
         brach_id=request.POST['brach_id']
-        return redirect(f'/brach_lists/{brach_id}/')
+        list_=DayActivityUserList.objects.get(id=brach_id)
+        return redirect(list_)
     
     return render(request,'brach_lists/home.html',{'brach_lists':brach_lists})
 
@@ -34,7 +35,7 @@ def view_list(request,brach_id):
         try:
             item.full_clean()
             item.save()
-            return redirect(f'/brach_lists/{brach_id}/')
+            return redirect(list_)
         except ValidationError:
             error="您不能输入空值！！"
     return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error})

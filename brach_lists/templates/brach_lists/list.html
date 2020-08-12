@@ -2,7 +2,7 @@
 
 {% block header_text %}榆林分行日动态</br>报送系统{% endblock %}
 
-{% block form_action %}/brach_lists/{{list.id}}/{% endblock %}
+{% block form_action %}{% url 'view_list' list.id %}{% endblock %}
 
 {% block form_body %}
     <div class="form-group">
