@@ -5,8 +5,9 @@ from selenium.webdriver.common.keys import Keys
 from brach_lists.models import Item,DayActivityUserList
 
 
-import unittest
-
+import unittest,datetime
+today=datetime.datetime.today().date()
+today_chinese=f"{today.year}年{today.month}月{today.day}日"
 class ItemValidationTest(FunctionalTest):
 
     def test_不能添加空白动态(self):
@@ -25,14 +26,14 @@ class ItemValidationTest(FunctionalTest):
         #提示动态内容不能为空
         self.wait_for(lambda:self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
-            '不能输入空白内容'
+            '您不能输入空值！！'
         ))
 
         #输入文字后提交，这次就好了
         self.browser.find_element_by_id('id_new_item').send_keys('去吃饭')
         self.browser.find_element_by_id('id_new_item').send_keys(Keys.ENTER)
         self.fun_检查表格中的标题行内容(f'今日动态\n{today_chinese}：')
-        self.fun_检查表格中的行内容('去吃饭')
+        self.fun_检查表格中的行内容('去吃饭。')
 
 
         #他比较调皮，又提交了一个空代办事项
@@ -42,7 +43,7 @@ class ItemValidationTest(FunctionalTest):
         #在清单中他又看到了一个类似的错误消息
         self.wait_for(lambda:self.assertEqual(
             self.browser.find_element_by_css_selector('.has-error').text,
-            '不能输入空白内容'
+            '您不能输入空值！！'
         ))
 
         #输入文字后就没问题了

@@ -2,12 +2,17 @@
 
 {% block header_text %}榆林分行日动态</br>报送系统{% endblock %}
 
-{% block form_action %}/brach_lists/{{list.id}}/add_item{% endblock %}
+{% block form_action %}/brach_lists/{{list.id}}/{% endblock %}
 
 {% block form_body %}
     <div class="form-group">
         <input class="form-control-lg col" id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
     </div>
+    {% if error %}
+    <div class="form-group has-error">
+        <span class="help-block">{{ error }}</span>
+    </div>
+    {% endif %}
 {% endblock %}
 
 {% block brach_name %}

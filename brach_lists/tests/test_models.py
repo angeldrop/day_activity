@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.core.exceptions import ValidationError
 
 from brach_lists.models import Item,DayActivityUserList
 
@@ -30,3 +31,10 @@ class ItemModelTest(TestCase):
         self.assertEqual(saved_userlist.count(),1)
         self.assertEqual(saved_userlist[0].full_name,'信息科技部')
 
+    def test_不能保存空白项目(self):
+        list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        item=Item(list=list_,text='')
+        with self.assertRaises(ValidationError):
+            item.save()
+            item.full_clean()
