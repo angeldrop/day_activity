@@ -4,6 +4,7 @@ from django.http import HttpRequest
 
 from brach_lists.views import home_page
 from brach_lists.models import Item,DayActivityUserList
+from brach_lists.forms import ItemForm,EMPTY_ITEM_ERROR
 
 # Create your tests here.
 class HomePageTest(TestCase):
@@ -97,4 +98,11 @@ class ListViewTest(TestCase):
         self.client.post(f'/brach_lists/{correct_branch.id}/',data={'item_text':''})
         self.assertEqual(DayActivityUserList.objects.count(),1)
         self.assertEqual(Item.objects.count(),0)
+        
+    
+    def test_详细页面可以使用form模块(self):
+        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        response=self.client.get(f'/brach_lists/{correct_branch.id}/')
+        self.assertIsInstance(response.context['form'],ItemForm)
     

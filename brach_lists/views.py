@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.core.exceptions import ValidationError
 from brach_lists.models import Item,DayActivityUserList
+from brach_lists.forms import ItemForm,EMPTY_ITEM_ERROR
 import datetime
 
 # Create your views here.
@@ -38,5 +39,5 @@ def view_list(request,brach_id):
             return redirect(list_)
         except ValidationError:
             error="您不能输入空值！！"
-    return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error})
+    return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error,'form':ItemForm()})
 

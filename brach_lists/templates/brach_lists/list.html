@@ -6,7 +6,7 @@
 
 {% block form_body %}
     <div class="form-group">
-        <input class="form-control-lg col" id="id_new_item" name="item_text" placeholder="请输入动态事项"/>
+        {{ form.text }}
     </div>
     {% if error %}
     <div class="form-group has-error">
