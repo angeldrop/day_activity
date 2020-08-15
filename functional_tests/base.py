@@ -61,3 +61,7 @@ class FunctionalTest(StaticLiveServerTestCase):
                 if time.time()-start_time>MAX_WAIT:
                     raise e
                 time.sleep(0.5)
+    
+    
+    def fun_找到输入框(self):
+        return self.browser.find_element_by_id('id_text')

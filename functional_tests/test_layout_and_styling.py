@@ -25,7 +25,7 @@ class LayoutAndStylingTest(FunctionalTest):
         self.browser.find_element_by_id('submit').click()
 
         #她看到输入框完美地居中显示
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox=self.fun_找到输入框()
         self.assertAlmostEqual(
             inputbox.location['x']+inputbox.size['width']/2,
             512,

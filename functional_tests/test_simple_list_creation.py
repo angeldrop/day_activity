@@ -26,7 +26,7 @@ class NewVisitorTest(FunctionalTest):
         self.browser.find_element_by_id('submit').click()
 
         #应用邀请她输入一个动态事项
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox=self.fun_找到输入框()
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             '请输入动态事项'
@@ -44,7 +44,7 @@ class NewVisitorTest(FunctionalTest):
 
         #页面中又显示了一个文本框，可以输入其他的动态事项
         #她输入了“去天宫和玉帝拉业务！”，测试会不会去标点符号
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox=self.fun_找到输入框()
         inputbox.send_keys('去天宫和玉帝拉业务！')
         inputbox.send_keys(Keys.ENTER)
 
@@ -68,7 +68,7 @@ class NewVisitorTest(FunctionalTest):
         select_box=self.browser.find_element_by_id('select_box')
         Select(select_box).select_by_value('ylxxkj')
         self.browser.find_element_by_id('submit').click()
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox=self.fun_找到输入框()
         inputbox.send_keys('去天堂拉业务')
         inputbox.send_keys(Keys.ENTER)
         self.fun_检查表格中的行内容('去天堂拉业务。')
@@ -96,7 +96,7 @@ class NewVisitorTest(FunctionalTest):
 
         #府谷县支行输入一个新动态，新建一个清单
         #他不想张三芬那么兴致勃勃
-        inputbox=self.browser.find_element_by_id('id_new_item')
+        inputbox=self.fun_找到输入框()
         inputbox.send_keys('去地狱拉业务')
         inputbox.send_keys(Keys.ENTER)
         self.fun_检查表格中的行内容('去地狱拉业务。')

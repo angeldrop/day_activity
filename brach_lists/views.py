@@ -18,6 +18,7 @@ def home_page(request):
 
 def view_list(request,brach_id):
     list_=DayActivityUserList.objects.get(id=brach_id)
+    form=ItemForm()
     error=None
     items=Item.objects.filter(list=list_)
     days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
@@ -28,16 +29,13 @@ def view_list(request,brach_id):
             [i.text for i in items.filter(activity_date=day.activity_date).order_by('record_date_time')]
             ])
     if request.method=='POST':
-        text_temp=request.POST['item_text']
+        text_temp=request.POST['text']
         if not len(text_temp)==0:
             if text_temp[-1] in ['；','。','！',',','.']:
                 text_temp=text_temp[:-1]
-        item=Item(text=text_temp,list=list_)
-        try:
-            item.full_clean()
-            item.save()
+        form=ItemForm(data=request.POST)
+        if form.is_valid():
+            Item.objects.create(text=text_temp,list=list_)
             return redirect(list_)
-        except ValidationError:
-            error="您不能输入空值！！"
-    return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error,'form':ItemForm()})
+    return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error,'form':form})
 

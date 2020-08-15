@@ -2,7 +2,7 @@ from django import forms
 from brach_lists.models import Item
 
 
-EMPTY_ITEM_ERROR='你不能输入空白'
+EMPTY_ITEM_ERROR='您不能输入空值！！'
 # Create your forms here.
 
 class ItemForm(forms.models.ModelForm):

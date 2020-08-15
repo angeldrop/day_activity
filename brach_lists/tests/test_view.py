@@ -22,6 +22,14 @@ class HomePageTest(TestCase):
 
 
 class ListViewTest(TestCase):
+
+
+    def test_用post方式写入非法空值(self):
+        list_=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        return self.client.post(f'/brach_lists/{list_.id}/',data={'text':''})
+    
+    
     def test_打开清单页并返回正确的template(self):
         DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
@@ -48,7 +56,7 @@ class ListViewTest(TestCase):
         correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
         self.client.post(f'/brach_lists/{correct_branch.id}/',
-            data={'item_text':'新的动态一条'}
+            data={'text':'新的动态一条'}
             )
         self.assertEqual(Item.objects.count(),1)
         new_item=Item.objects.first()
@@ -61,7 +69,7 @@ class ListViewTest(TestCase):
         correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
         response=self.client.post(f'/brach_lists/{correct_branch.id}/',
-            data={'item_text':'新的动态一条'}
+            data={'text':'新的动态一条'}
             )
         self.assertRedirects(response,f'/brach_lists/{correct_branch.id}/')
     
@@ -76,33 +84,33 @@ class ListViewTest(TestCase):
     def test_可以去掉最后的标点符号(self):
         correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
-        response=self.client.post(f'/brach_lists/{correct_branch.id}/',data={'item_text':'新的动态，一条；'})
+        response=self.client.post(f'/brach_lists/{correct_branch.id}/',data={'text':'新的动态，一条；'})
         self.assertEqual(Item.objects.first().text,'新的动态，一条')
-        response=self.client.post(f'/brach_lists/{correct_branch.id}/',data={'item_text':'新的第二条；动态一条。'})
+        response=self.client.post(f'/brach_lists/{correct_branch.id}/',data={'text':'新的第二条；动态一条。'})
         self.assertEqual(Item.objects.last().text,'新的第二条；动态一条')
 
 
     def test_空值错误可以解析到正确的模板(self):
-        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
-            brach_type='部门',full_name='信息科技部')
-        response=self.client.post(f'/brach_lists/{correct_branch.id}/',data={'item_text':''})
+        response=self.test_用post方式写入非法空值()
         self.assertEqual(response.status_code,200)
         self.assertTemplateUsed(response,'brach_lists/list.html')
+        
+        
+    def test_空值错误可以返回合适的错误(self):
+        response=self.test_用post方式写入非法空值()
         expected_error="您不能输入空值！！"
         self.assertContains(response,expected_error)
     
     
     def test_空值不会被创建到数据库(self):
-        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
-            brach_type='部门',full_name='信息科技部')
-        self.client.post(f'/brach_lists/{correct_branch.id}/',data={'item_text':''})
+        self.test_用post方式写入非法空值()
         self.assertEqual(DayActivityUserList.objects.count(),1)
         self.assertEqual(Item.objects.count(),0)
         
     
     def test_详细页面可以使用form模块(self):
-        correct_branch=DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
-            brach_type='部门',full_name='信息科技部')
-        response=self.client.get(f'/brach_lists/{correct_branch.id}/')
+        response=self.test_用post方式写入非法空值()
         self.assertIsInstance(response.context['form'],ItemForm)
+        self.assertContains(response,'name="text"')
+        
     
