@@ -40,6 +40,39 @@ class ItemModelTest(TestCase):
             item.full_clean()
     
     
+    def test_不能重复项目(self):
+        list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        Item.objects.create(list=list_,text='bla')
+        with self.assertRaises(ValidationError):
+            item=Item(list=list_,text='bla')
+            item.full_clean()
+    
+    
+    def test_不能过度限制重复项目(self):
+        list1 = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        list2 = DayActivityUserList.objects.create(id='806050701',order_number=15,
+            brach_type='管理型支行',full_name='府谷县支行')
+        Item.objects.create(list=list1,text='bla')
+        item=Item(list=list2,text='bla')
+        item.full_clean()    #不该抛出异常
+    
+    
+    def test_item默认文本为空白(self):
+        item=Item()
+        self.assertEqual(item.text,'')
+        
+        
+    def test_item和DayActivityUserList关联(self):
+        list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
+            brach_type='部门',full_name='信息科技部')
+        item=Item()
+        item.list=list_
+        item.save()
+        self.assertIn(item,list_.item_set.all())
+    
+class DayActivityUserListModelTest(TestCase):    
     def test_get_absolute_url(self):
         list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
