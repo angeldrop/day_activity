@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import resolve
 from django.http import HttpRequest
+from unittest import skip
 
 from brach_lists.views import home_page
 from brach_lists.models import Item,DayActivityUserList
@@ -114,3 +115,19 @@ class ListViewTest(TestCase):
         self.assertContains(response,'name="text"')
         
     
+    @skip
+    def test_重复值可以显示错误信息到lists页面页面(self):
+        list1=DayActivityUserList.objects.create(id='806050701',order_number=15,
+            brach_type='管理型支行',full_name='府谷县支行')
+        item1=Item.objects.create(list=list1,text='textey')
+
+        response=self.client.post(
+            f'/brach_lists/{list1.id}/',
+            data={'text':'textey'}
+        )
+
+        expected_error='您不能输入重复的待办事项'
+        self.assertContains(response,expected_error)
+        self.assertTemplateUsed(response,'brach_id/list.html')
+        self.assertEqual(Item.objects.all().count(),1)
+
