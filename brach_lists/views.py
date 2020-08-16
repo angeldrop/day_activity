@@ -33,9 +33,10 @@ def view_list(request,brach_id):
         if not len(text_temp)==0:
             if text_temp[-1] in ['；','。','！',',','.']:
                 text_temp=text_temp[:-1]
-        form=ItemForm(data=request.POST)
+        form=ItemForm(data={'text':text_temp})
         if form.is_valid():
-            Item.objects.create(text=text_temp,list=list_)
+            form.save(for_list=list_)
+            # Item.objects.create(text=text_temp,list=list_)
             return redirect(list_)
     return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error,'form':form})
 
