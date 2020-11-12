@@ -115,7 +115,6 @@ class ListViewTest(TestCase):
         self.assertContains(response,'name="text"')
         
     
-    @skip
     def test_重复值可以显示错误信息到lists页面页面(self):
         list1=DayActivityUserList.objects.create(id='806050701',order_number=15,
             brach_type='管理型支行',full_name='府谷县支行')

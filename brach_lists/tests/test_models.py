@@ -24,12 +24,15 @@ class ItemModelTest(TestCase):
         second_saved_item=saved_items[1]
         self.assertEqual(first_saved_item.text,'The first (ever) list item')
         self.assertEqual(second_saved_item.text,'Item the second')
+        
+        
     def test_保存并提取DayActivityUserList数据库项目(self):
         list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
             brach_type='部门',full_name='信息科技部')
         saved_userlist=DayActivityUserList.objects.all()
         self.assertEqual(saved_userlist.count(),1)
         self.assertEqual(saved_userlist[0].full_name,'信息科技部')
+
 
     def test_不能保存空白项目(self):
         list_ = DayActivityUserList.objects.create(id='ylxxkj',order_number=13,
@@ -71,6 +74,9 @@ class ItemModelTest(TestCase):
         item.list=list_
         item.save()
         self.assertIn(item,list_.item_set.all())
+    
+    
+    
     
 class DayActivityUserListModelTest(TestCase):    
     def test_get_absolute_url(self):

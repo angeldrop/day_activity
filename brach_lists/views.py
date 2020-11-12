@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.core.exceptions import ValidationError
 from brach_lists.models import Item,DayActivityUserList
-from brach_lists.forms import ItemForm,EMPTY_ITEM_ERROR
+from brach_lists.forms import ExistingListItemForm,ItemForm,EMPTY_ITEM_ERROR
 import datetime
 
 # Create your views here.
@@ -18,7 +18,6 @@ def home_page(request):
 
 def view_list(request,brach_id):
     list_=DayActivityUserList.objects.get(id=brach_id)
-    form=ItemForm()
     error=None
     items=Item.objects.filter(list=list_)
     days=Item.objects.filter(list=list_).distinct('activity_date').order_by('-activity_date')
@@ -33,10 +32,12 @@ def view_list(request,brach_id):
         if not len(text_temp)==0:
             if text_temp[-1] in ['；','。','！',',','.']:
                 text_temp=text_temp[:-1]
-        form=ItemForm(data={'text':text_temp})
+        form=ExistingListItemForm(for_list=list_,data={'text':text_temp})
         if form.is_valid():
-            form.save(for_list=list_)
+            form.save()
             # Item.objects.create(text=text_temp,list=list_)
             return redirect(list_)
+    else:
+        form=ExistingListItemForm(for_list=list_)    
     return render(request,'brach_lists/list.html',{'list':list_,'days':days,'today':today,'items':items,'things':things,'error':error,'form':form})
 
